@@ -10,7 +10,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     // Fetching from local FastAPI
-    fetch('http://127.0.0.1:8000/dashboard/1')
+    fetch('https://bridgecare-ai.onrender.com')
       .then(res => res.json())
       .then(setData);
   }, []);
