@@ -9,10 +9,11 @@ export default function Dashboard() {
   const [generatedPlans, setGeneratedPlans] = useState<{ [key: number]: boolean }>({});
 
   useEffect(() => {
-    // Fetching from local FastAPI
-    fetch('https://bridgecare-ai.onrender.com')
+    // Fetching from live FastAPI Render URL
+    fetch('https://bridgecare-ai.onrender.com/dashboard/1')
       .then(res => res.json())
-      .then(setData);
+      .then(setData)
+      .catch(err => console.error("Error fetching data:", err));
   }, []);
 
   const handleGeneratePlan = (id: number) => {
@@ -22,7 +23,8 @@ export default function Dashboard() {
     }, 600);
   };
 
-  if (!data) return <div className="p-10 text-center">Loading AI Insights...</div>;
+  // Wait until we actually have the dashboard data before rendering the numbers
+  if (!data || !data.gap_score) return <div className="p-10 text-center text-lg mt-20">Loading AI Insights from Server...</div>;
 
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-6">
@@ -61,7 +63,7 @@ export default function Dashboard() {
 
       <h2 className="text-2xl font-semibold mt-8">Top Recommendations</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-        {data.top_recommendations.map((rec: any) => (
+        {data.top_recommendations?.map((rec: any) => (
           <Card key={rec.id}>
             <CardContent className="p-6">
               <p className="text-lg font-medium">{rec.text}</p>
